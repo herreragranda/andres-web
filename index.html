@@ -8,8 +8,9 @@
     <!-- Inyectar secretos de GitHub Actions -->
     <script>
         // GitHub Actions reemplazará estas líneas con los valores reales
-        const SUPABASE_URL = 'YOUR_SUPABASE_URL';
-        const SUPABASE_ANON_KEY = 'YOUR_SUPABASE_ANON_KEY';
+        // Usamos propiedades en window para evitar redeclaraciones (const)
+        window.SUPABASE_URL = 'YOUR_SUPABASE_URL';
+        window.SUPABASE_ANON_KEY = 'YOUR_SUPABASE_ANON_KEY';
     </script>
 </head>
 <body>
