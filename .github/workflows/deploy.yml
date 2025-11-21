@@ -1,28 +1,20 @@
-name: Deploy a GitHub Pages
+name: Leer Secrets y Variables con JS
 
-on:
-  push:
-    branches: [ main ]
-
-permissions:
-  contents: write
-  pages: write
-  id-token: write
+on: [push]
 
 jobs:
-  deploy:
+  build:
     runs-on: ubuntu-latest
-
     steps:
-    - uses: actions/checkout@v4
+    - uses: actions/checkout@v2
 
-    - name: Actualizar credenciales en config.js
-      run: |
-        sed -i "s|https://pddwgzblisqfbaesafek.supabase.co|${{ secrets.SUPABASE_URL }}|g" js/config.js
-        sed -i "s|eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.*0M|${{ secrets.SUPABASE_ANON_KEY }}|g" js/config.js
-
-    - name: Deploy
-      uses: peaceiris/actions-gh-pages@v3
+    - name: Configurar Node.js
+      uses: actions/setup-node@v2
       with:
-        github_token: ${{ secrets.GITHUB_TOKEN }}
-        publish_dir: ./
+        node-version: '14'
+
+    - name: Ejecutar script JavaScript con variables de entorno
+      run: node script.js
+      env:
+        # Asigna el secreto de GitHub a una variable de entorno llamada MY_SECRET
+        MY_SECRET: ${{ secrets.SUPABASE_ANON_KEY }}
