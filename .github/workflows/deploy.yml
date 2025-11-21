@@ -1,0 +1,62 @@
+name: Build y Deploy con Secretos
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v4
+
+    - name: Inyectar Secretos en env-config.js
+      run: |
+        cat > env-config.js << 'EOF'
+        <!-- Este script inyecta las variables de entorno en window.__ENV__ -->
+        <!-- Inyectadas por GitHub Actions desde secretos -->
+        <script>
+          window.__ENV__ = {
+            SUPABASE_URL: '${{ secrets.SUPABASE_URL }}',
+            SUPABASE_ANON_KEY: '${{ secrets.SUPABASE_ANON_KEY }}'
+          };
+          
+          // Debug: mostrar si están cargadas (sin mostrar los valores reales)
+          if (window.__ENV__.SUPABASE_URL && window.__ENV__.SUPABASE_ANON_KEY) {
+            console.log('✓ Variables de entorno cargadas correctamente');
+          } else {
+            console.warn('⚠️ Algunas variables de entorno no están configuradas como GitHub Secrets');
+          }
+        </script>
+        EOF
+
+    - name: Verificar que los secretos estén inyectados
+      run: |
+        if grep -q "window.__ENV__.SUPABASE_URL = '';" env-config.js; then
+          echo "⚠️ Advertencia: SUPABASE_URL no está configurado como secreto"
+        fi
+        if grep -q "window.__ENV__.SUPABASE_ANON_KEY = '';" env-config.js; then
+          echo "⚠️ Advertencia: SUPABASE_ANON_KEY no está configurado como secreto"
+        fi
+
+    - name: Subir artefactos
+      uses: actions/upload-artifact@v3
+      with:
+        name: site
+        path: |
+          index.html
+          env-config.js
+          styles/
+          js/
+          .gitignore
+          README.md
+
+    - name: Deploy a GitHub Pages (opcional)
+      if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+      uses: peaceiris/actions-gh-pages@v3
+      with:
+        github_token: ${{ secrets.GITHUB_TOKEN }}
+        publish_dir: ./
