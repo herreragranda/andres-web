@@ -5,8 +5,12 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Autenticación con Supabase</title>
     <link rel="stylesheet" href="styles/style.css">
-    <!-- Inyectar variables de entorno (procesadas por GitHub Actions o servidor local) -->
-    <script src="env-config.js"></script>
+    <!-- Inyectar secretos de GitHub Actions -->
+    <script>
+        // GitHub Actions reemplazará estas líneas con los valores reales
+        const SUPABASE_URL = 'YOUR_SUPABASE_URL';
+        const SUPABASE_ANON_KEY = 'YOUR_SUPABASE_ANON_KEY';
+    </script>
 </head>
 <body>
     <div class="container">
