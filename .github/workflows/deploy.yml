@@ -4,7 +4,6 @@ on:
   push:
     branches: [ main ]
  
-# Permisos necesarios para que el GITHUB_TOKEN pueda publicar en gh-pages
 permissions:
   contents: write
   pages: write
@@ -17,29 +16,22 @@ jobs:
     steps:
     - uses: actions/checkout@v4
 
-    - name: Verificar que los secrets existen
+    - name: Inyectar secretos en js/config.js
       run: |
-        if [ -z "${{ secrets.SUPABASE_URL }}" ]; then
-          echo "ERROR: El secret SUPABASE_URL no está configurado"; exit 1;
-        fi
-        if [ -z "${{ secrets.SUPABASE_ANON_KEY }}" ]; then
-          echo "ERROR: El secret SUPABASE_ANON_KEY no está configurado"; exit 1;
-        fi
+        sed -i "s|YOUR_SUPABASE_URL|${{ secrets.SUPABASE_URL }}|g" js/config.js
+        sed -i "s|YOUR_SUPABASE_ANON_KEY|${{ secrets.SUPABASE_ANON_KEY }}|g" js/config.js
 
-    - name: Inyectar secretos en index.html
+    - name: Ver variables inyectadas
       run: |
-        # Reemplaza los placeholders en index.html por los valores reales
-        sed -i "s|YOUR_SUPABASE_URL|${{ secrets.SUPABASE_URL }}|g" index.html
-        sed -i "s|YOUR_SUPABASE_ANON_KEY|${{ secrets.SUPABASE_ANON_KEY }}|g" index.html
-
-    - name: Ver archivo index.html (para debug)
-      run: |
-        echo "--- index.html (head) ---"
-        sed -n '1,40p' index.html
+        echo "=== Variables inyectadas en js/config.js ==="
+        echo "SUPABASE_URL: $(grep "const SUPABASE_URL" js/config.js)"
+        echo "SUPABASE_ANON_KEY: $(grep "const SUPABASE_ANON_KEY" js/config.js | cut -c1-80)..."
+        echo ""
+        echo "=== Primeras líneas de js/config.js ==="
+        head -15 js/config.js
 
     - name: Deploy a GitHub Pages
       uses: peaceiris/actions-gh-pages@v3
       with:
         github_token: ${{ secrets.GITHUB_TOKEN }}
         publish_dir: ./
-
