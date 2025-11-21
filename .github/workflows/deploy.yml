@@ -3,34 +3,25 @@ name: Deploy a GitHub Pages
 on:
   push:
     branches: [ main ]
- 
+
 permissions:
   contents: write
   pages: write
   id-token: write
 
 jobs:
-  build-and-deploy:
+  deploy:
     runs-on: ubuntu-latest
 
     steps:
     - uses: actions/checkout@v4
 
-    - name: Inyectar secretos en js/config.js
+    - name: Actualizar credenciales en config.js
       run: |
-        sed -i "s|YOUR_SUPABASE_URL|${{ secrets.SUPABASE_URL }}|g" js/config.js
-        sed -i "s|YOUR_SUPABASE_ANON_KEY|${{ secrets.SUPABASE_ANON_KEY }}|g" js/config.js
+        sed -i "s|https://pddwgzblisqfbaesafek.supabase.co|${{ secrets.SUPABASE_URL }}|g" js/config.js
+        sed -i "s|eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.*0M|${{ secrets.SUPABASE_ANON_KEY }}|g" js/config.js
 
-    - name: Ver variables inyectadas
-      run: |
-        echo "=== Variables inyectadas en js/config.js ==="
-        echo "SUPABASE_URL: $(grep "const SUPABASE_URL" js/config.js)"
-        echo "SUPABASE_ANON_KEY: $(grep "const SUPABASE_ANON_KEY" js/config.js | cut -c1-80)..."
-        echo ""
-        echo "=== Primeras líneas de js/config.js ==="
-        head -15 js/config.js
-
-    - name: Deploy a GitHub Pages
+    - name: Deploy
       uses: peaceiris/actions-gh-pages@v3
       with:
         github_token: ${{ secrets.GITHUB_TOKEN }}
