@@ -7,6 +7,9 @@
 const SUPABASE_URL = window.SUPABASE_URL || null;
 const SUPABASE_ANON_KEY = window.SUPABASE_ANON_KEY || null;
 
+log.console('Supabase URL:', SUPABASE_URL);
+log.console('Supabase Anon Key:', SUPABASE_ANON_KEY);
+
 // Validar que los valores estén disponibles
 if (!SUPABASE_URL || !SUPABASE_ANON_KEY) {
     console.warn('⚠️ Supabase no está configurado. Asegúrate de que GitHub Actions reemplace los placeholders.');
