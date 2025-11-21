@@ -2,8 +2,6 @@
 
 const SUPABASE_ANON_KEY = process.env.SUPABASE_ANON_KEY;
 
-console.log(`Mi variable es: ${myVariable}`);
-// Por seguridad, GitHub enmascara automáticamente los secretos en los logs
 console.log(`Mi secreto es (enmascarado): ${SUPABASE_ANON_KEY}`); 
 
 if (SUPABASE_ANON_KEY) {
