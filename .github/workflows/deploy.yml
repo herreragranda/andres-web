@@ -3,6 +3,12 @@ name: Deploy a GitHub Pages
 on:
   push:
     branches: [ main ]
+ 
+# Permisos necesarios para que el GITHUB_TOKEN pueda publicar en gh-pages
+permissions:
+  contents: write
+  pages: write
+  id-token: write
 
 jobs:
   build-and-deploy:
