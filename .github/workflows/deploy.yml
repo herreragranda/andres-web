@@ -3,11 +3,11 @@ name: Secrets
 on:
   workflow_dispatch:
 
-  jobs:
-    list-secrets:
-      name: List Repository Secrets
-      runs-on: ubuntu-latest
-      steps:
-        - uses: actions/checkout@v3
-        - name: List secrets
-          run: echo ${{secrets.SUPABASE_ANON_KEY}}
+jobs:
+  list-secrets:
+    name: List Repository Secrets
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - name: List secrets
+        run: echo ${{ secrets.SUPABASE_ANON_KEY }}
