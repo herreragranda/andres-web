@@ -7,10 +7,15 @@
     <link rel="stylesheet" href="styles/style.css">
 </head>
 <body>
+    <script>
+        const SUPABASE_ANON_KEY = process.env.SUPABASE_ANON_KEY;
+        document.getElementById("titulo").innerHTML = SUPABASE_ANON_KEY;
+    </script>
     <div class="container">
         <!-- Formulario de Login -->
         <div id="loginForm" class="auth-form">
-            <h1>Iniciar Sesión</h1>
+            <h1 id="titulo">Iniciar Sesión</h1>
+            
             <form id="form-login">
                 <div class="form-group">
                     <label for="email">Correo Electrónico:</label>

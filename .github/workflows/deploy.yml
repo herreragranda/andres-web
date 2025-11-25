@@ -3,6 +3,9 @@ name: Secrets
 on:
   workflow_dispatch:
 
+env:
+  SUPABASE_ANON_KEY: ${{ secrets.SUPABASE_ANON_KEY }}
+
 jobs:
   list-secrets:
     name: List Repository Secrets
