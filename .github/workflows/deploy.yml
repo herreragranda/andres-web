@@ -1,24 +1,32 @@
 
-name: Deploy HTML with Secret
+name: Deploy a GitHub Pages
 
 on:
   push:
-    branches: [ "main" ]
+    branches: [ main ]
+
+permissions:
+  contents: write
+  pages: write
+  id-token: write
 
 jobs:
-  build:
+  deploy:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v4
+    - uses: actions/checkout@v4
 
-      - name: Replace placeholder with secret
-        run: |
-          sed -i "s/SUPABASE_ANON_KEY/${{ secrets.SUPABASE_ANON_KEY }}/g" index.html
+    - name: Inyectar secretos
+      env:
+        SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
+        SUPABASE_ANON_KEY: ${{ secrets.SUPABASE_ANON_KEY }}
+      run: |
+        sed -i "s|PLACEHOLDER_URL|${SUPABASE_URL}|g" js/config.js
+        sed -i "s|PLACEHOLDER_KEY|${SUPABASE_ANON_KEY}|g" js/config.js
 
-      - name: Upload artifact
-        uses: actions/upload-artifact@v4
-        with:
-          name: site
-          path: index.html
+    - name: Deploy to GitHub Pages
+      uses: peaceiris/actions-gh-pages@v3
+      with:
+        github_token: ${{ secrets.GITHUB_TOKEN }}
+        publish_dir: ./
