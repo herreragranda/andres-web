@@ -1,20 +1,13 @@
-name: Leer Secrets y Variables con JS
+name: Secrets
 
-on: [push]
+on:
+  workflow_dispatch:
 
-jobs:
-  build:
-    runs-on: ubuntu-latest
-    steps:
-    - uses: actions/checkout@v2
-
-    - name: Configurar Node.js
-      uses: actions/setup-node@v2
-      with:
-        node-version: '14'
-
-    - name: Ejecutar script JavaScript con variables de entorno
-      run: node script.js
-      env:
-        # Asigna el secreto de GitHub a una variable de entorno llamada MY_SECRET
-        MY_SECRET: ${{ secrets.SUPABASE_ANON_KEY }}
+  jobs:
+    list-secrets:
+      name: List Repository Secrets
+      runs-on: ubuntu-latest
+      steps:
+        - uses: actions/checkout@v3
+        - name: List secrets
+          run: echo ${{secrets.SUPABASE_ANON_KEY}}
