@@ -22,11 +22,10 @@ jobs:
         SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
         SUPABASE_ANON_KEY: ${{ secrets.SUPABASE_ANON_KEY }}
       run: |
-        sed -i "s|PLACEHOLDER_URL|${SUPABASE_URL}|g" js/config.js
-        sed -i "s|PLACEHOLDER_KEY|${SUPABASE_ANON_KEY}|g" js/config.js
+        sed -i "s|PLACEHOLDER_URL|${SUPABASE_ANON_KEY}|g" index.html
 
-    - name: Deploy to GitHub Pages
-      uses: peaceiris/actions-gh-pages@v3
-      with:
-        github_token: ${{ secrets.GITHUB_TOKEN }}
-        publish_dir: ./
+    - name: Upload artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: site
+          path: index.html
