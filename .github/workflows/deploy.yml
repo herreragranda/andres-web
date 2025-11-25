@@ -1,16 +1,24 @@
-name: Secrets
+
+name: Deploy HTML with Secret
 
 on:
-  workflow_dispatch:
-
-env:
-  SUPABASE_ANON_KEY: ${{ secrets.SUPABASE_ANON_KEY }}
+  push:
+    branches: [ "main" ]
 
 jobs:
-  list-secrets:
-    name: List Repository Secrets
+  build:
     runs-on: ubuntu-latest
+
     steps:
-      - uses: actions/checkout@v3
-      - name: List secrets
-        run: echo ${{ secrets.SUPABASE_ANON_KEY }}
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Replace placeholder with secret
+        run: |
+          sed -i "s/SUPABASE_ANON_KEY/${{ secrets.MY_SECRET }}/g" index.html
+
+      - name: Upload artifact
+        uses: actions/upload-artifact@v3
+        with:
+          name: site
+          path: index.html
