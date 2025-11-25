@@ -18,7 +18,7 @@ jobs:
           sed -i "s/SUPABASE_ANON_KEY/${{ secrets.MY_SECRET }}/g" index.html
 
       - name: Upload artifact
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: site
           path: index.html
