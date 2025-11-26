@@ -15,4 +15,13 @@ jobs:
 
       - name: Create config.js with secret
         run: |
-          echo "const MY_SECRET = \"${{ secrets.SUPABASE_ANON_KEY }}\";" > config.js
+          printf 'const MY_SECRET = "%s";\n' "${{ secrets.SUPABASE_ANON_KEY }}" > config.js
+
+      - name: Deploy to GitHub Pages
+        run: |
+          git config --global user.name "github-actions"
+          git config --global user.email "github-actions@github.com"
+          git checkout --orphan gh-pages
+          git add index.html config.js
+          git commit -m "Deploy with secret"
+          git push origin gh-pages --force
