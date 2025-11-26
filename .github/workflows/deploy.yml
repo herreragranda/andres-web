@@ -1,3 +1,4 @@
+
 name: Deploy HTML with Secret
 
 on:
@@ -12,13 +13,6 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
 
-      - name: Replace placeholder with secret
+      - name: Create config.js with secret
         run: |
-          sed -i "s|SUPABASE_ANON_KEY|${{ secrets.SUPABASE_ANON_KEY }}|g" index.html
-
-      - name: Upload artifact
-        uses: actions/upload-artifact@v4
-        with:
-          name: site
-          path: index.html
-
+          echo "const MY_SECRET = \"${{ secrets.SUPABASE_ANON_KEY }}\";" > config.js
